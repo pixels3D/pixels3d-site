@@ -83,3 +83,12 @@ h3{margin:.2rem 0}
   --halo-color: #8b5cf6;
 }
 .btn:hover { transform: translateY(-2px); }
+
+/* === Halo (diffusion plein écran) === */
+:root{
+  --halo-x: -999px;
+  --halo-y: -999px;
+  --halo-alpha: 0;
+  --halo-radius: 600px;
+  --halo-color: #8b5cf6;
+}

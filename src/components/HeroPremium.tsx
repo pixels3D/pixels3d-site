@@ -11,15 +11,21 @@ export default function HeroPremium(){
         <h1 className="gradient-title">Innovate <span className="grad">Without Limits</span></h1>
         <p>XR temps réel, sites 3D et UI animées. Nous concevons des expériences premium pour marques ambitieuses.</p>
         <div className="cta-row">
-          <RadiantButton className="btn" haloColor="#8b5cf6" maxAlpha={0.5} onClick={()=>navigate("/work")}>
+          <RadiantButton
+            className="btn"
+            haloColor="#8b5cf6"
+            hoverAlpha={0.45}
+            hoverRadius={1000}
+            burstAlpha={0.7}
+            burstRadius={2000}
+            onClick={()=>navigate("/work")}
+          >
             Voir nos travaux
           </RadiantButton>
           <Link className="btn btn-ghost" to="/contact">Démarrer un projet</Link>
         </div>
       </div>
-      <div className="card" style={{height:300, display:"grid", placeItems:"center"}}>
-        Aperçu 3D (branché plus tard)
-      </div>
+      <div className="card" style={{height:300, display:"grid", placeItems:"center"}}>Aperçu 3D (à brancher)</div>
     </section>
   );
 }
