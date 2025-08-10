@@ -1,19 +1,45 @@
-import React from "react";
-import { motion } from "framer-motion";
-import clsx from "clsx";
+import React from 'react'
+import { motion } from 'framer-motion'
+import clsx from 'clsx'
 
-type Props = React.PropsWithChildren<{ className?: string }>;
+interface GlowCardProps {
+  children: React.ReactNode
+  className?: string
+  hover?: boolean
+  glow?: boolean
+}
 
-export default function GlowCard({ className, children }: Props) {
+export default function GlowCard({ 
+  children, 
+  className = '', 
+  hover = true, 
+  glow = true 
+}: GlowCardProps) {
   return (
     <motion.div
-      initial={{ y: 8, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: .5, ease: "easeOut" }}
-      className={clsx("glow-card", className)}
+      className={clsx(
+        'relative glass rounded-2xl overflow-hidden',
+        {
+          'glass-hover': hover,
+          'neon-glow': glow
+        },
+        className
+      )}
+      whileHover={hover ? { y: -4, scale: 1.02 } : undefined}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      {children}
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
+      
+      {/* Glow effect on hover */}
+      {glow && (
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 via-emerald-400/5 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      )}
+      
+      {/* Content */}
+      <div className="relative z-10">
+        {children}
+      </div>
     </motion.div>
-  );
+  )
 }

@@ -1,84 +1,121 @@
-import React from "react";
+import React, { useEffect, useRef } from 'react'
 
-// Écoute des CustomEvents "halo:set" et "halo:off" pour piloter le halo.
-// Inertie lissée (raf) + variables CSS globales (--halo-x/--halo-y/--halo-alpha/--halo-color/--halo-radius)
-export default function HoverBloom(){
-  const state = React.useRef({
-    curX: -999, curY: -999, curAlpha: 0, curRadius: 500,
-    tx: -999, ty: -999, ta: 0, tr: 500, color: "#8b5cf6",
-    raf: 0
-  });
+interface HaloState {
+  x: number
+  y: number
+  alpha: number
+  radius: number
+  color: string
+  targetAlpha: number
+  targetRadius: number
+  lastUpdate: number
+}
 
-  React.useEffect(() => {
-    const s = state.current;
-    const setVars = () => {
-      const root = document.documentElement.style;
-      root.setProperty("--halo-x", `${s.curX}px`);
-      root.setProperty("--halo-y", `${s.curY}px`);
-      root.setProperty("--halo-alpha", `${s.curAlpha}`);
-      root.setProperty("--halo-radius", `${s.curRadius}px`);
-      root.setProperty("--halo-color", s.color);
-    };
+export default function HoverBloom() {
+  const rafRef = useRef<number>()
+  const haloState = useRef<HaloState>({
+    x: 50,
+    y: 50,
+    alpha: 0,
+    radius: 0,
+    color: '#8b5cf6',
+    targetAlpha: 0,
+    targetRadius: 0,
+    lastUpdate: Date.now()
+  })
 
-    const lerp = (a:number,b:number,t:number)=> a+(b-a)*t;
+  const updateHaloCSS = (state: HaloState) => {
+    document.documentElement.style.setProperty('--halo-x', `${state.x}%`)
+    document.documentElement.style.setProperty('--halo-y', `${state.y}%`)
+    document.documentElement.style.setProperty('--halo-alpha', state.alpha.toString())
+    document.documentElement.style.setProperty('--halo-radius', `${state.radius}px`)
+    document.documentElement.style.setProperty('--halo-color', state.color)
+  }
 
-    const tick = () => {
-      const kPos = 0.12;     // inertie position
-      const kAmp = 0.18;     // inertie alpha
-      const kRad = 0.15;     // inertie rayon
-      s.curX = lerp(s.curX, s.tx, kPos);
-      s.curY = lerp(s.curY, s.ty, kPos);
-      s.curAlpha = lerp(s.curAlpha, s.ta, kAmp);
-      s.curRadius = lerp(s.curRadius, s.tr, kRad);
-      setVars();
-      s.raf = requestAnimationFrame(tick);
-    };
-    s.raf = requestAnimationFrame(tick);
+  const animate = () => {
+    const state = haloState.current
+    const now = Date.now()
+    const dt = Math.min(now - state.lastUpdate, 16) / 16 // Normalize to 60fps
+    state.lastUpdate = now
 
-    const onSet = (e: Event) => {
-      const ev = e as CustomEvent<{x:number;y:number;color?:string;alpha?:number;radius?:number;}>;
-      s.tx = ev.detail.x; s.ty = ev.detail.y;
-      if (ev.detail.color) s.color = ev.detail.color!;
-      if (ev.detail.alpha !== undefined) s.ta = ev.detail.alpha!;
-      if (ev.detail.radius !== undefined) s.tr = ev.detail.radius!;
-    };
-    const onOff = () => { s.ta = 0; s.tr = Math.max(s.tr, 500); };
+    // Auto-decay if no events for 180ms
+    if (now - state.lastUpdate > 180) {
+      state.targetAlpha = 0
+      state.targetRadius = 0
+    }
 
-    window.addEventListener("halo:set", onSet as EventListener);
-    window.addEventListener("halo:off", onOff);
+    // Smooth interpolation with inertia
+    const lerpFactor = 0.12 * dt
+    state.alpha += (state.targetAlpha - state.alpha) * lerpFactor
+    state.radius += (state.targetRadius - state.radius) * lerpFactor
+
+    updateHaloCSS(state)
+
+    // Continue animation if values are changing
+    if (Math.abs(state.targetAlpha - state.alpha) > 0.001 || 
+        Math.abs(state.targetRadius - state.radius) > 1) {
+      rafRef.current = requestAnimationFrame(animate)
+    }
+  }
+
+  useEffect(() => {
+    const handleHaloSet = (event: CustomEvent) => {
+      const { x, y, alpha, radius, color } = event.detail
+      const state = haloState.current
+      
+      state.x = x
+      state.y = y
+      state.targetAlpha = alpha
+      state.targetRadius = radius
+      state.color = color || '#8b5cf6'
+      state.lastUpdate = Date.now()
+
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(animate)
+      }
+    }
+
+    const handleHaloOff = () => {
+      const state = haloState.current
+      state.targetAlpha = 0
+      state.targetRadius = 0
+      state.lastUpdate = Date.now()
+
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(animate)
+      }
+    }
+
+    window.addEventListener('halo:set', handleHaloSet as EventListener)
+    window.addEventListener('halo:off', handleHaloOff)
 
     return () => {
-      cancelAnimationFrame(s.raf);
-      window.removeEventListener("halo:set", onSet as EventListener);
-      window.removeEventListener("halo:off", onOff);
-    };
-  }, []);
+      window.removeEventListener('halo:set', handleHaloSet as EventListener)
+      window.removeEventListener('halo:off', handleHaloOff)
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
+  }, [])
 
   return (
-    <div
-      aria-hidden
+    <div 
+      className="fixed inset-0 pointer-events-none z-[2]"
       style={{
-        position:"fixed", inset:0, pointerEvents:"none", zIndex:2,
-        // 2 couches: wash large + cœur intense, contrôlées par variables
         background: `
           radial-gradient(
-            var(--halo-radius, 600px) var(--halo-radius, 600px)
-            at var(--halo-x, -999px) var(--halo-y, -999px),
-            color-mix(in oklab, var(--halo-color, #8b5cf6) 85%, transparent)
-            calc(var(--halo-alpha, 0) * 100%),
-            transparent 70%
+            circle at var(--halo-x) var(--halo-y),
+            color-mix(in srgb, var(--halo-color) calc(var(--halo-alpha) * 60%), transparent) 0%,
+            transparent calc(var(--halo-radius) * 0.3px)
           ),
           radial-gradient(
-            calc(var(--halo-radius, 600px) * 0.45) calc(var(--halo-radius, 600px) * 0.45)
-            at var(--halo-x, -999px) var(--halo-y, -999px),
-            color-mix(in oklab, var(--halo-color, #8b5cf6) 98%, white 2%)
-            calc(var(--halo-alpha, 0) * 100%),
-            transparent 60%
+            circle at var(--halo-x) var(--halo-y),
+            color-mix(in srgb, var(--halo-color) calc(var(--halo-alpha) * 35%), transparent) 0%,
+            transparent calc(var(--halo-radius) * 0.6px)
           )
         `,
-        mixBlendMode:"screen",
-        transition:"opacity .25s ease"
+        mixBlendMode: 'screen'
       }}
     />
-  );
+  )
 }

@@ -1,18 +1,44 @@
-import React from "react";
-export default function Services(){
-  const items = [
-    {t:"Sites 3D & WebGL",d:"Showrooms, configurateurs et storytelling immersif."},
-    {t:"XR / WebXR",d:"Expériences AR/VR cross-device."},
-    {t:"UI/UX Premium",d:"Design système, micro-interactions, accessibilité."},
-  ];
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
+import GlowCard from '../components/ui/GlowCard'
+
+export default function Services() {
   return (
-    <main className="container">
-      <h1>Services</h1>
-      <div style={{display:"grid",gap:18,gridTemplateColumns:"repeat(3,1fr)"}}>
-        {items.map((x,i)=>(
-          <div key={i} className="card"><h3 style={{marginTop:0}}>{x.t}</h3><p style={{opacity:.9}}>{x.d}</p></div>
-        ))}
-      </div>
-    </main>
+    <div className="pt-20">
+      {/* Header */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">
+            Nos services
+          </h1>
+          <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+            Trois expertises complémentaires pour transformer vos idées en expériences 3D premium qui captivent et convertissent
+          </p>
+        </div>
+      </section>
+
+      {/* Coming Soon */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <GlowCard className="p-12">
+            <div className="text-6xl mb-6">🚀</div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Page en construction
+            </h2>
+            <p className="text-xl text-gray-300 mb-8">
+              Nous finalisons actuellement le détail de nos services. 
+              En attendant, contactez-nous pour discuter de votre projet !
+            </p>
+            <Link to="/contact">
+              <button className="btn-primary inline-flex items-center space-x-2 text-lg px-8 py-4">
+                <span>Nous contacter</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </Link>
+          </GlowCard>
+        </div>
+      </section>
+    </div>
   )
 }

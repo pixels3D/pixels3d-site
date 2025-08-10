@@ -1,10 +1,12 @@
 [build]
-  publish = "dist"
   command = "npm install --legacy-peer-deps && npm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
+  VITE_SUPABASE_URL = "https://iurzditxjpwzkzfdnuql.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cnpkaXR4anB3emt6ZmRudXFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3ODM1MDMsImV4cCI6MjA3MDM1OTUwM30.Eg6QsnDbh1kfk1YwUO84ZfmUgPGE5sw0psHyCnO0p20"
 
 [[redirects]]
   from = "/*"
