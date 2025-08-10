@@ -1,3 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root { --bg:#070711; --fg:#e6e6f0; --accent:#7c3aed; --accent2:#22d3ee; }
+html,body,#root{height:100%;margin:0;padding:0}
+body{
+  background: radial-gradient(1200px 800px at 85% 20%, rgba(124,58,237,.25), transparent 60%),
+              radial-gradient(900px 600px at 10% 80%, rgba(34,211,238,.2), transparent 55%),
+              linear-gradient(180deg, #0a0a12 0%, #070711 100%);
+  color:var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
+}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.hero{display:flex;gap:32px;align-items:center;justify-content:space-between;padding:56px 0}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;padding:20px;backdrop-filter: blur(8px);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;}
+.card:hover{transform: translateY(-4px);border-color: rgba(124,58,237,.45);
+            box-shadow: 0 10px 30px rgba(124,58,237,.18), 0 8px 24px rgba(34,211,238,.12);}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;
+       background:linear-gradient(90deg,var(--accent),var(--accent2));font-weight:600;}
+.btn{display:inline-block;padding:12px 18px;border-radius:12px;font-weight:600;
+     background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;
+     box-shadow: 0 8px 24px rgba(124,58,237,.35);
+     transition: transform .2s ease, box-shadow .2s ease;}
+.btn:hover{transform: translateY(-2px);box-shadow:0 12px 30px rgba(124,58,237,.45);}
+h1{font-size:42px;line-height:1.1;margin:10px 0 14px}
+p{opacity:.9}
