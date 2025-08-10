@@ -1,26 +1,21 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key'
+export const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL!,
+  import.meta.env.VITE_SUPABASE_ANON_KEY!
+)
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-export interface Lead {
+export type Lead = {
   id?: string
   name: string
   email: string
-  budget: string
+  budget?: string
   message: string
-  file_url?: string
   created_at?: string
 }
 
-export const createLead = async (lead: Omit<Lead, 'id' | 'created_at'>) => {
-  const { data, error } = await supabase
-    .from('leads')
-    .insert([lead])
-    .select()
-
+export async function createLead(input: Omit<Lead, 'id'|'created_at'>) {
+  const { data, error } = await supabase.from('leads').insert([input]).select().single()
   if (error) throw error
-  return data[0]
+  return data
 }

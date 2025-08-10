@@ -23,3 +23,12 @@ body{
 .btn:hover{transform: translateY(-2px);box-shadow:0 12px 30px rgba(124,58,237,.45);}
 h1{font-size:42px;line-height:1.1;margin:10px 0 14px}
 p{opacity:.9}
+
+/* helpers inputs */
+input, textarea {
+  background: rgba(255,255,255,.06);
+  color: white; border:1px solid rgba(255,255,255,.12);
+  border-radius:10px; padding:10px 12px; outline:none;
+}
+label { display:grid; gap:6px; font-weight:600; opacity:.95 }
+h3{margin:.2rem 0}

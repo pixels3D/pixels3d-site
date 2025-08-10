@@ -1,23 +1,30 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/common/Layout";
+import Home from "./pages/Home";
+import Work from "./pages/Work";
+import WorkDetail from "./pages/WorkDetail";
+import Services from "./pages/Services";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Legal from "./pages/Legal";
+import NotFound from "./pages/NotFound";
+import Health from "./pages/Health";
 
 export default function App(){
   return (
-    <main className="container">
-      <section className="hero">
-        <div style={{maxWidth:680}}>
-          <span className="badge">Pixels 3D</span>
-          <h1>Innovate Without Limits</h1>
-          <p>Design d’interfaces, expériences XR et métavers immersifs.
-             Performances, élégance, précision.</p>
-          <div style={{marginTop:18}}>
-            <a className="btn" href="#">Get started</a>
-          </div>
-        </div>
-        <div className="card" style={{width:360,minHeight:240}}>
-          <h2>Showcase</h2>
-          <p>Démo 3D / UI animée en préparation.</p>
-        </div>
-      </section>
-    </main>
+    <Routes>
+      <Route path="/healthz" element={<Health />} />
+      <Route element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="work" element={<Work />} />
+        <Route path="work/:slug" element={<WorkDetail />} />
+        <Route path="services" element={<Services />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="legal" element={<Legal />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }

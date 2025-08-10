@@ -1,109 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Box } from 'lucide-react'
-
-export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const location = useLocation()
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const navigation = [
-    { name: 'Accueil', href: '/' },
-    { name: 'Réalisations', href: '/work' },
-    { name: 'Services', href: '/services' },
-    { name: 'À propos', href: '/about' },
-    { name: 'Contact', href: '/contact' }
-  ]
-
+import React from "react";
+import { Link, NavLink } from "react-router-dom";
+export default function Navbar(){
+  const link = ({isActive}:{isActive:boolean}) => ({opacity:isActive?1:.8});
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-black/80 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <motion.div 
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-              className="w-8 h-8"
-            >
-              <Box className="w-8 h-8 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
-            </motion.div>
-            <span className="text-xl font-bold">Pixels 3D</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`relative text-sm font-medium transition-colors duration-200 ${
-                  location.pathname === item.href
-                    ? 'text-emerald-400'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {item.name}
-                {location.pathname === item.href && (
-                  <motion.div
-                    layoutId="underline"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-emerald-400"
-                  />
-                )}
-              </Link>
-            ))}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+    <header style={{position:"sticky",top:0,zIndex:40,backdropFilter:"blur(8px)",background:"rgba(7,7,17,.35)", borderBottom:"1px solid rgba(255,255,255,.06)"}}>
+      <nav className="container" style={{display:"flex",alignItems:"center",gap:24, padding:"14px 24px"}}>
+        <Link to="/" style={{fontWeight:800,letterSpacing:.3}}>Pixels<span style={{color:"#7c3aed"}}>3D</span></Link>
+        <div style={{display:"flex",gap:18}}>
+          <NavLink to="/work" style={link}>Travaux</NavLink>
+          <NavLink to="/services" style={link}>Services</NavLink>
+          <NavLink to="/about" style={link}>Studio</NavLink>
+          <NavLink to="/contact" style={link}>Contact</NavLink>
         </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-black/95 backdrop-blur-lg border-t border-white/10"
-          >
-            <div className="px-4 py-6 space-y-4">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block text-base font-medium transition-colors ${
-                    location.pathname === item.href
-                      ? 'text-emerald-400'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+      </nav>
+    </header>
   )
 }

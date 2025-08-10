@@ -1,81 +1,30 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Box, Mail, Phone, MapPin } from 'lucide-react'
-
-export default function Footer() {
+import React from "react";
+import { Link } from "react-router-dom";
+export default function Footer(){
   return (
-    <footer className="bg-zinc-950 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo & Description */}
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <Box className="w-8 h-8 text-emerald-400" />
-              <span className="text-xl font-bold">Pixels 3D</span>
-            </div>
-            <p className="text-gray-400 mb-6 max-w-md">
-              Nous transformons vos idées en expériences 3D immersives. 
-              Spécialistes en WebGL, configurateurs et imagerie 3D premium.
-            </p>
-            <div className="space-y-2 text-sm text-gray-400">
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4" />
-                <span>15 Rue de la Paix, 75001 Paris</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="w-4 h-4" />
-                <span>+33 1 23 45 67 89</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="w-4 h-4" />
-                <span>contact@pixels3d.com</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Navigation</h3>
-            <nav className="space-y-2">
-              <Link to="/" className="block text-gray-400 hover:text-white transition-colors">
-                Accueil
-              </Link>
-              <Link to="/work" className="block text-gray-400 hover:text-white transition-colors">
-                Réalisations
-              </Link>
-              <Link to="/services" className="block text-gray-400 hover:text-white transition-colors">
-                Services
-              </Link>
-              <Link to="/about" className="block text-gray-400 hover:text-white transition-colors">
-                À propos
-              </Link>
-              <Link to="/contact" className="block text-gray-400 hover:text-white transition-colors">
-                Contact
-              </Link>
-            </nav>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Légal</h3>
-            <nav className="space-y-2">
-              <Link to="/legal#mentions" className="block text-gray-400 hover:text-white transition-colors">
-                Mentions légales
-              </Link>
-              <Link to="/legal#privacy" className="block text-gray-400 hover:text-white transition-colors">
-                Confidentialité
-              </Link>
-              <Link to="/legal#cgu" className="block text-gray-400 hover:text-white transition-colors">
-                CGU
-              </Link>
-            </nav>
-          </div>
+    <footer style={{marginTop:64, borderTop:"1px solid rgba(255,255,255,.06)", background:"rgba(7,7,17,.35)"}}>
+      <div className="container" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:24,padding:"24px"}}>
+        <div>
+          <div style={{fontWeight:800,marginBottom:8}}>Pixels 3D</div>
+          <p style={{opacity:.8,margin:0}}>XR, Web 3D & interfaces premium.</p>
         </div>
-
-        <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 Pixels 3D. Tous droits réservés.</p>
+        <div>
+          <div style={{opacity:.7,marginBottom:8}}>Plateforme</div>
+          <ul style={{listStyle:"none",padding:0,margin:0,display:"grid",gap:6}}>
+            <li><Link to="/work">Études de cas</Link></li>
+            <li><Link to="/services">Services</Link></li>
+            <li><Link to="/about">À propos</Link></li>
+          </ul>
+        </div>
+        <div>
+          <div style={{opacity:.7,marginBottom:8}}>Légal</div>
+          <ul style={{listStyle:"none",padding:0,margin:0,display:"grid",gap:6}}>
+            <li><Link to="/legal">Mentions légales</Link></li>
+            <li><a href="mailto:contact@pixels3d.fr">contact@pixels3d.fr</a></li>
+          </ul>
         </div>
       </div>
+      <div className="container" style={{opacity:.6,padding:"8px 24px 24px"}}>© Pixels3D — {new Date().getFullYear()}</div>
     </footer>
   )
 }
