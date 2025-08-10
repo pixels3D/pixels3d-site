@@ -1,119 +1,61 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Text3D, Center, Environment, MeshTransmissionMaterial } from '@react-three/drei'
-import { motion } from 'framer-motion'
-import * as THREE from 'three'
+import React, { useMemo } from "react"
+import { Canvas } from "@react-three/fiber"
+import { OrbitControls, Environment } from "@react-three/drei"
 
-function AnimatedSphere() {
-  const meshRef = useRef<THREE.Mesh>(null)
-  
-  useEffect(() => {
-    if (!meshRef.current) return
-    
-    const animate = () => {
-      if (meshRef.current) {
-        meshRef.current.rotation.x += 0.005
-        meshRef.current.rotation.y += 0.01
-      }
-      requestAnimationFrame(animate)
-    }
-    animate()
-  }, [])
-
+function Bottle(){
+  // Corps = cylindre, col = cylindre fin, bouchon = petit cylindre
   return (
-    <mesh ref={meshRef} position={[0, 0, 0]}>
-      <icosahedronGeometry args={[1, 0]} />
-      <MeshTransmissionMaterial
-        color="#00ff88"
-        thickness={0.5}
-        roughness={0}
-        transmission={1}
-        ior={1.5}
-        chromaticAberration={0.02}
-        backside={true}
-      />
-    </mesh>
+    <group position={[0, -0.5, 0]}>
+      {/* Corps */}
+      <mesh castShadow receiveShadow>
+        <cylinderGeometry args={[0.35, 0.35, 1.6, 64]} />
+        <meshStandardMaterial metalness={0.7} roughness={0.25} color="#25223a" />
+      </mesh>
+      {/* Étiquette */}
+      <mesh position={[0, 0.1, 0.352]}>
+        <planeGeometry args={[0.5, 0.35]} />
+        <meshStandardMaterial color="#f8f8ff" />
+      </mesh>
+      {/* Col */}
+      <mesh position={[0, 0.95, 0]} castShadow>
+        <cylinderGeometry args={[0.12, 0.12, 0.5, 48]} />
+        <meshStandardMaterial metalness={0.5} roughness={0.35} color="#2b2744" />
+      </mesh>
+      {/* Capsule */}
+      <mesh position={[0, 1.28, 0]} castShadow>
+        <cylinderGeometry args={[0.14, 0.14, 0.18, 48]} />
+        <meshStandardMaterial metalness={0.3} roughness={0.3} color="#7c3aed" />
+      </mesh>
+      {/* Base */}
+      <mesh rotation={[ -Math.PI/2, 0, 0]} position={[0, -0.85, 0]} receiveShadow>
+        <ringGeometry args={[0.35, 0.6, 64]} />
+        <meshStandardMaterial color="#13121e" />
+      </mesh>
+    </group>
   )
 }
 
-function Scene() {
+function Scene(){
+  const colorA = "#7c3aed"
+  const colorB = "#22d3ee"
   return (
     <>
+      <ambientLight intensity={0.6} />
+      <pointLight position={[2, 2, 2]} intensity={1.1} color={colorA} />
+      <pointLight position={[-2, 1.5, -1]} intensity={0.9} color={colorB} />
+      <spotLight position={[0, 5, 3]} angle={0.3} penumbra={0.5} intensity={1.2} castShadow />
+      <Bottle />
       <Environment preset="city" />
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <AnimatedSphere />
-      <OrbitControls
-        enableZoom={false}
-        enablePan={false}
-        autoRotate
-        autoRotateSpeed={0.5}
-        maxPolarAngle={Math.PI / 1.8}
-        minPolarAngle={Math.PI / 2.5}
-      />
+      <OrbitControls enablePan={false} maxPolarAngle={Math.PI * 0.58} autoRotate autoRotateSpeed={0.8}/>
     </>
   )
 }
 
-interface Hero3DProps {
-  className?: string
-}
-
-export default function Hero3D({ className = '' }: Hero3DProps) {
-  const [webglSupported, setWebglSupported] = useState(true)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    // Check WebGL support
-    try {
-      const canvas = document.createElement('canvas')
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-      setWebglSupported(!!gl)
-    } catch (e) {
-      setWebglSupported(false)
-    }
-    
-    // Simulate loading
-    const timer = setTimeout(() => setIsLoading(false), 1000)
-    return () => clearTimeout(timer)
-  }, [])
-
-  if (!webglSupported) {
-    return (
-      <div className={`relative ${className}`}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex items-center justify-center h-full bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-2xl border border-white/10"
-        >
-          <div className="text-center p-8">
-            <div className="w-24 h-24 mx-auto mb-4 bg-emerald-400/20 rounded-full flex items-center justify-center">
-              <div className="w-12 h-12 bg-emerald-400 rounded-lg rotate-45" />
-            </div>
-            <p className="text-gray-300">WebGL non supporté</p>
-            <p className="text-sm text-gray-500 mt-2">Fallback image loading...</p>
-          </div>
-        </motion.div>
-      </div>
-    )
-  }
-
+export default function Hero3D(){
+  const dpr = useMemo(()=> Math.min(window.devicePixelRatio ?? 1, 2), [])
   return (
-    <div className={`relative ${className}`}>
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-10 rounded-2xl">
-          <div className="text-center">
-            <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-            <p className="text-sm text-gray-400">Chargement 3D...</p>
-          </div>
-        </div>
-      )}
-      <Canvas
-        camera={{ position: [0, 0, 4], fov: 50 }}
-        gl={{ antialias: true, alpha: true }}
-        onCreated={() => setIsLoading(false)}
-        style={{ background: 'transparent' }}
-      >
+    <div style={{width:"100%", height: 420, borderRadius: 20, overflow:"hidden", border:"1px solid rgba(255,255,255,.08)", background:"rgba(255,255,255,.03)"}}>
+      <Canvas shadows dpr={dpr} camera={{ position:[2.2, 1.6, 2.4], fov: 45 }}>
         <Scene />
       </Canvas>
     </div>

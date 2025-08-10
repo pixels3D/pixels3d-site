@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
+
+const Hero3D = lazy(() => import("../components/3d/Hero3D"));
 
 export default function Home(){
   return (
@@ -14,13 +16,10 @@ export default function Home(){
             <Link className="btn" style={{background:"rgba(255,255,255,.06)",color:"white"}} to="/contact">Démarrer un projet</Link>
           </div>
         </div>
-        <div className="card" style={{width:420,minHeight:260}}>
-          <h2>Capacités clés</h2>
-          <ul style={{margin:0,paddingLeft:18,opacity:.9}}>
-            <li>WebGL / React Three Fiber</li>
-            <li>Réalité mixte & WebXR</li>
-            <li>UI/UX avec micro-animations</li>
-          </ul>
+        <div style={{width:420, minWidth:320}}>
+          <Suspense fallback={<div className="card" style={{width:"100%",height:420,display:"grid",placeItems:"center"}}>Chargement 3D…</div>}>
+            <Hero3D />
+          </Suspense>
         </div>
       </section>
 
