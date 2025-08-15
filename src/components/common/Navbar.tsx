@@ -18,7 +18,6 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Accueil', href: '/' },
-    { name: 'Showroom', href: '/showroom' },
     { name: 'Réalisations', href: '/work' },
     { name: 'Services', href: '/services' },
     { name: 'À propos', href: '/about' },
@@ -27,7 +26,7 @@ export default function Navbar() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-black/80 backdrop-blur-lg border-b border-white/10 shadow-lg' : 'bg-transparent'
+      isScrolled ? 'bg-black/80 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
@@ -44,18 +43,24 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-2">
+          <div className="hidden md:flex items-center space-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`nav-pill ${
+                className={`relative text-sm font-medium transition-colors duration-200 ${
                   location.pathname === item.href
-                    ? 'nav-active'
-                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                    ? 'text-emerald-400'
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 {item.name}
+                {location.pathname === item.href && (
+                  <motion.div
+                    layoutId="underline"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-emerald-400"
+                  />
+                )}
               </Link>
             ))}
           </div>
@@ -86,10 +91,10 @@ export default function Navbar() {
                   key={item.name}
                   to={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block nav-pill ${
+                  className={`block text-base font-medium transition-colors ${
                     location.pathname === item.href
-                      ? 'nav-active'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      ? 'text-emerald-400'
+                      : 'text-gray-300 hover:text-white'
                   }`}
                 >
                   {item.name}

@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Filter, ArrowRight, ExternalLink, Play } from 'lucide-react'
-import GlowCard from '../components/ui/GlowCard'
+import SectionHeader from '../components/ui/SectionHeader'
+import CardGlass from '../components/ui/CardGlass'
+import NeonButton from '../components/ui/NeonButton'
+import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { projects } from '../data/mockData'
 
 export default function Work() {
@@ -32,20 +35,19 @@ export default function Work() {
     <div className="pt-20">
       {/* Header */}
       <section className="py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">
-            Nos réalisations
-          </h1>
-          <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-            Découvrez notre portfolio de projets 3D qui ont marqué leur secteur et généré des résultats exceptionnels pour nos clients
-          </p>
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader
+            title="Nos réalisations"
+            subtitle="Découvrez notre portfolio de projets 3D qui ont marqué leur secteur et généré des résultats exceptionnels pour nos clients"
+            centered
+          />
         </div>
       </section>
 
       {/* Filters */}
       <section className="pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <GlowCard className="p-6">
+          <CardGlass className="p-6">
             <div className="flex items-center space-x-4 mb-6">
               <Filter className="w-5 h-5 text-emerald-400" />
               <span className="text-white font-semibold">Filtres</span>
@@ -96,7 +98,7 @@ export default function Work() {
                 </div>
               </div>
             </div>
-          </GlowCard>
+          </CardGlass>
         </div>
       </section>
 
@@ -105,7 +107,7 @@ export default function Work() {
         <div className="max-w-7xl mx-auto">
           {isLoading ? (
             <div className="flex justify-center py-24">
-              <div className="w-12 h-12 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+              <LoadingSpinner size="lg" />
             </div>
           ) : (
             <AnimatePresence mode="wait">
@@ -126,12 +128,12 @@ export default function Work() {
                     <p className="text-gray-400 mb-6">
                       Essayez de modifier vos filtres pour découvrir d'autres réalisations.
                     </p>
-                    <button
+                    <NeonButton
+                      variant="secondary"
                       onClick={() => handleFilterChange('Tous', 'Toutes')}
-                      className="btn-secondary"
                     >
                       Réinitialiser les filtres
-                    </button>
+                    </NeonButton>
                   </div>
                 ) : (
                   filteredProjects.map((project, index) => (
@@ -141,7 +143,7 @@ export default function Work() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
                     >
-                      <GlowCard className="overflow-hidden group cursor-pointer">
+                      <CardGlass className="overflow-hidden group cursor-pointer">
                         <Link to={`/work/${project.id}`}>
                           <div className="relative aspect-video overflow-hidden">
                             <img
@@ -208,7 +210,7 @@ export default function Work() {
                             </div>
                           </div>
                         </Link>
-                      </GlowCard>
+                      </CardGlass>
                     </motion.div>
                   ))
                 )}
@@ -222,7 +224,7 @@ export default function Work() {
       {!isLoading && filteredProjects.length > 0 && (
         <section className="pb-24 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <GlowCard className="p-12">
+            <CardGlass className="p-12">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
                 Votre projet mérite le même traitement premium
               </h2>
@@ -232,18 +234,17 @@ export default function Work() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/contact">
-                  <button className="btn-primary inline-flex items-center space-x-2 text-lg px-8 py-4">
-                    <span>Lancer mon projet</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
+                  <NeonButton size="lg" icon={ArrowRight}>
+                    Lancer mon projet
+                  </NeonButton>
                 </Link>
                 <Link to="/services">
-                  <button className="btn-secondary text-lg px-8 py-4">
+                  <NeonButton variant="secondary" size="lg">
                     Découvrir nos services
-                  </button>
+                  </NeonButton>
                 </Link>
               </div>
-            </GlowCard>
+            </CardGlass>
           </div>
         </section>
       )}

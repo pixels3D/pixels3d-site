@@ -2,7 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, ArrowLeft, Search } from 'lucide-react'
-import GlowCard from '../components/ui/GlowCard'
+import NeonButton from '../components/ui/NeonButton'
+import CardGlass from '../components/ui/CardGlass'
 
 export default function NotFound() {
   return (
@@ -13,7 +14,7 @@ export default function NotFound() {
         transition={{ duration: 0.6 }}
         className="max-w-2xl mx-auto text-center"
       >
-        <GlowCard className="p-12">
+        <CardGlass className="p-12">
           <div className="text-9xl font-bold text-emerald-400/20 mb-6">404</div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -27,16 +28,14 @@ export default function NotFound() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link to="/">
-              <button className="btn-primary inline-flex items-center space-x-2 text-lg px-8 py-4">
-                <Home className="w-5 h-5" />
-                <span>Retour à l'accueil</span>
-              </button>
+              <NeonButton size="lg" icon={Home}>
+                Retour à l'accueil
+              </NeonButton>
             </Link>
             <Link to="/work">
-              <button className="btn-secondary inline-flex items-center space-x-2 text-lg px-8 py-4">
-                <Search className="w-5 h-5" />
-                <span>Voir nos projets</span>
-              </button>
+              <NeonButton variant="secondary" size="lg" icon={Search}>
+                Voir nos projets
+              </NeonButton>
             </Link>
           </div>
           
@@ -50,7 +49,7 @@ export default function NotFound() {
               <span>Page précédente</span>
             </button>
           </div>
-        </GlowCard>
+        </CardGlass>
       </motion.div>
     </div>
   )

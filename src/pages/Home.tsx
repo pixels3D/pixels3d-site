@@ -1,16 +1,19 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Box, Settings, Zap, Star } from 'lucide-react'
-import HeroPremium from '../components/ui/HeroPremium'
-import { SectionMetrics, SectionPartners } from '../components/ui/Sections'
-import GlowCard from '../components/ui/GlowCard'
-import { projects } from '../data/mockData'
+import { ArrowRight, Box, Settings, Zap, Star, CheckCircle } from 'lucide-react'
+import Hero3D from '../components/3d/Hero3D'
+import NeonButton from '../components/ui/NeonButton'
+import CardGlass from '../components/ui/CardGlass'
+import SectionHeader from '../components/ui/SectionHeader'
+import { projects, clients } from '../data/mockData'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 
 export default function Home() {
+  const { ref: heroRef, controls: heroControls } = useScrollAnimation()
   const { ref: pillarsRef, controls: pillarsControls } = useScrollAnimation()
   const { ref: casesRef, controls: casesControls } = useScrollAnimation()
+  const { ref: clientsRef, controls: clientsControls } = useScrollAnimation()
 
   const pillars = [
     {
@@ -33,22 +36,79 @@ export default function Home() {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <HeroPremium />
+      <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-black to-blue-900/20" />
+        
+        <motion.div
+          ref={heroRef}
+          initial="hidden"
+          animate={heroControls}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+          }}
+          className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10"
+        >
+          {/* Text Content */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.8 } }
+            }}
+            className="text-center lg:text-left"
+          >
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-emerald-100 to-emerald-300 bg-clip-text text-transparent">
+              Pixels 3D
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+              Nous transformons vos idées en{' '}
+              <span className="text-emerald-400 font-semibold">expériences 3D</span>{' '}
+              immersives et performantes.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <NeonButton size="lg" icon={ArrowRight}>
+                <Link to="/contact">Demander un devis</Link>
+              </NeonButton>
+              <NeonButton variant="secondary" size="lg">
+                <Link to="/work">Voir nos réalisations</Link>
+              </NeonButton>
+            </div>
+          </motion.div>
 
-      {/* Metrics Section */}
-      <SectionMetrics />
+          {/* 3D Viewer */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, x: 50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.2 } }
+            }}
+            className="h-96 lg:h-[500px]"
+          >
+            <Hero3D className="w-full h-full" />
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white/60 rounded-full mt-2" />
+          </div>
+        </motion.div>
+      </section>
 
       {/* Pillars Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">
-              Nos expertises
-            </h2>
-            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-              Trois domaines de compétence pour donner vie à vos projets les plus ambitieux
-            </p>
-          </div>
+          <SectionHeader
+            title="Nos expertises"
+            subtitle="Trois domaines de compétence pour donner vie à vos projets les plus ambitieux"
+            centered
+            className="mb-16"
+          />
 
           <motion.div
             ref={pillarsRef}
@@ -68,13 +128,13 @@ export default function Home() {
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
                 }}
               >
-                <GlowCard className="p-8 text-center h-full">
+                <CardGlass className="p-8 text-center h-full">
                   <div className="w-16 h-16 mx-auto mb-6 bg-emerald-400/10 rounded-2xl flex items-center justify-center">
                     <pillar.icon className="w-8 h-8 text-emerald-400" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4 text-white">{pillar.title}</h3>
                   <p className="text-gray-400 leading-relaxed">{pillar.description}</p>
-                </GlowCard>
+                </CardGlass>
               </motion.div>
             ))}
           </motion.div>
@@ -84,14 +144,12 @@ export default function Home() {
       {/* Case Studies Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-zinc-950/50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">
-              Études de cas
-            </h2>
-            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-              Découvrez comment nous avons transformé les défis de nos clients en succès mesurables
-            </p>
-          </div>
+          <SectionHeader
+            title="Études de cas"
+            subtitle="Découvrez comment nous avons transformé les défis de nos clients en succès mesurables"
+            centered
+            className="mb-16"
+          />
 
           <motion.div
             ref={casesRef}
@@ -112,7 +170,7 @@ export default function Home() {
                 }}
               >
                 <Link to={`/work/${project.id}`}>
-                  <GlowCard className="overflow-hidden group cursor-pointer">
+                  <CardGlass className="overflow-hidden group cursor-pointer">
                     <div className="aspect-video overflow-hidden">
                       <img
                         src={project.image}
@@ -136,7 +194,7 @@ export default function Home() {
                         <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
-                  </GlowCard>
+                  </CardGlass>
                 </Link>
               </motion.div>
             ))}
@@ -144,21 +202,55 @@ export default function Home() {
 
           <div className="text-center">
             <Link to="/work">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="btn-secondary inline-flex items-center space-x-2"
-              >
-                <span>Voir tous nos projets</span>
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
+              <NeonButton variant="secondary" icon={ArrowRight}>
+                Voir tous nos projets
+              </NeonButton>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Partners Section */}
-      <SectionPartners />
+      {/* Clients Section */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            ref={clientsRef}
+            initial="hidden"
+            animate={clientsControls}
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+            }}
+            className="text-center"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ils nous font confiance
+            </h2>
+            <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
+              Marques de luxe, constructeurs automobiles et leaders de l'industrie : 
+              nous sommes fiers de les accompagner dans leur transformation digitale 3D.
+            </p>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+              {clients.map((client, index) => (
+                <motion.div
+                  key={client.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="grayscale hover:grayscale-0 transition-all duration-300"
+                >
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="h-12 w-auto mx-auto opacity-60 hover:opacity-100 transition-opacity"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-emerald-600/10 via-transparent to-blue-600/10">
@@ -179,46 +271,32 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="btn-primary inline-flex items-center space-x-2 text-lg px-8 py-4"
-                >
-                  <span>Demander un devis gratuit</span>
-                  <ArrowRight className="w-5 h-5" />
-                </motion.button>
+                <NeonButton size="lg" icon={ArrowRight}>
+                  Demander un devis gratuit
+                </NeonButton>
               </Link>
               <Link to="/work">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="btn-secondary inline-flex items-center space-x-2 text-lg px-8 py-4"
-                >
-                  <span>Découvrir notre portfolio</span>
-                </motion.button>
+                <NeonButton variant="secondary" size="lg">
+                  Découvrir notre portfolio
+                </NeonButton>
               </Link>
             </div>
             
             {/* Trust indicators */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              className="mt-12 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-gray-400"
-            >
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-gray-400">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full" />
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
                 <span>Devis gratuit sous 48h</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full" />
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
                 <span>Support technique inclus</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full" />
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
                 <span>Garantie de satisfaction</span>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>

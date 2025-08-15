@@ -1,39 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Base propre sans classes custom shadcn */
-:root{
-  --bg: #0b0b10;
-  --fg: #e7e7ef;
-}
-html,body,#root{height:100%}
-body{
-  margin:0;
-  color:var(--fg);
-  background:
-    radial-gradient(1000px 650px at 85% 12%, rgba(124,58,237,.16), transparent 55%),
-    radial-gradient(900px 650px at 8% 85%, rgba(34,211,238,.12), transparent 55%),
-    #0a0a12;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, Arial;
-}
-.card{
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.05);
-  backdrop-filter: blur(8px);
-}
-.btn{
-  display:inline-block;
-  border-radius:12px;
-  padding:10px 14px;
-  font-weight:600;
-  color:white;
-  background: linear-gradient(90deg, rgb(124 58 237), rgb(34 211 238));
-  box-shadow: 0 10px 30px rgba(124,58,237,.35);
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.btn:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(124,58,237,.5);
-}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Pixels 3D - Agence spécialisée en imagerie 3D et WebGL</title>
+    <meta name="description" content="Pixels 3D transforme vos idées en expériences 3D immersives. Imagerie 3D, configurateurs web et développement WebGL premium." />
+    <meta name="keywords" content="3D, WebGL, configurateur, imagerie 3D, développement web, Three.js, React" />
+    <meta name="author" content="Pixels 3D" />
+    
+    <!-- OpenGraph -->
+    <meta property="og:title" content="Pixels 3D - Agence spécialisée en imagerie 3D et WebGL" />
+    <meta property="og:description" content="Transformez vos idées en expériences 3D immersives avec notre expertise en WebGL et React Three Fiber." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pixels3d.com" />
+    <meta property="og:image" content="https://pixels3d.com/og-image.jpg" />
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pixels 3D - Agence spécialisée en imagerie 3D et WebGL" />
+    <meta name="twitter:description" content="Transformez vos idées en expériences 3D immersives." />
+    <meta name="twitter:image" content="https://pixels3d.com/og-image.jpg" />
+    
+    <!-- Theme -->
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="color-scheme" content="dark" />
+  </head>
+  <body class="bg-black text-white antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

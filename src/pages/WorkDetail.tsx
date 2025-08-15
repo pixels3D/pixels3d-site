@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Play, ExternalLink, Award, Users, Clock, TrendingUp } from 'lucide-react'
-import GlowCard from '../components/ui/GlowCard'
+import NeonButton from '../components/ui/NeonButton'
+import CardGlass from '../components/ui/CardGlass'
+import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { projects } from '../data/mockData'
 
 export default function WorkDetail() {
@@ -53,20 +55,22 @@ export default function WorkDetail() {
                 <span className="text-sm text-gray-500">{project.year}</span>
               </div>
               <div className="flex space-x-3">
-                <button 
+                <NeonButton 
+                  variant="secondary" 
+                  size="sm" 
+                  icon={Play}
                   onClick={() => setIsVideoPlaying(true)}
-                  className="btn-secondary inline-flex items-center space-x-2 text-sm px-4 py-2"
                 >
-                  <Play className="w-4 h-4" />
-                  <span>Voir la démo</span>
-                </button>
-                <button 
+                  Voir la démo
+                </NeonButton>
+                <NeonButton 
+                  variant="secondary" 
+                  size="sm" 
+                  icon={ExternalLink}
                   onClick={() => window.alert('Lien vers le projet en live (non implémenté dans la démo)')}
-                  className="btn-secondary inline-flex items-center space-x-2 text-sm px-4 py-2"
                 >
-                  <ExternalLink className="w-4 h-4" />
-                  <span>Voir en live</span>
-                </button>
+                  Voir en live
+                </NeonButton>
               </div>
             </div>
 
@@ -91,7 +95,7 @@ export default function WorkDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <GlowCard className="relative aspect-video overflow-hidden group cursor-pointer">
+            <CardGlass className="relative aspect-video overflow-hidden group cursor-pointer">
               <img
                 src={project.image}
                 alt={project.title}
@@ -107,7 +111,7 @@ export default function WorkDetail() {
                   <Play className="w-8 h-8 text-white ml-1" />
                 </motion.button>
               </div>
-            </GlowCard>
+            </CardGlass>
           </motion.div>
         </div>
       </section>
@@ -133,13 +137,13 @@ export default function WorkDetail() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 + index * 0.1 }}
                   >
-                    <GlowCard className="text-center p-8">
+                    <CardGlass className="text-center p-8">
                       <div className="w-16 h-16 mx-auto mb-4 bg-emerald-400/10 rounded-2xl flex items-center justify-center">
                         <IconComponent className="w-8 h-8 text-emerald-400" />
                       </div>
                       <div className="text-3xl font-bold text-emerald-400 mb-2">{value}</div>
                       <div className="text-gray-400">{metric}</div>
-                    </GlowCard>
+                    </CardGlass>
                   </motion.div>
                 )
               })}
@@ -158,7 +162,7 @@ export default function WorkDetail() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <GlowCard className="p-8">
+              <CardGlass className="p-8">
                 <h3 className="text-2xl font-bold text-white mb-6">Technologies utilisées</h3>
                 <div className="space-y-3">
                   {project.technologies.map((tech, index) => (
@@ -174,7 +178,7 @@ export default function WorkDetail() {
                     </motion.div>
                   ))}
                 </div>
-              </GlowCard>
+              </CardGlass>
             </motion.div>
 
             {/* Features */}
@@ -183,7 +187,7 @@ export default function WorkDetail() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <GlowCard className="p-8">
+              <CardGlass className="p-8">
                 <h3 className="text-2xl font-bold text-white mb-6">Fonctionnalités clés</h3>
                 <div className="space-y-3">
                   {project.features.map((feature, index) => (
@@ -199,7 +203,7 @@ export default function WorkDetail() {
                     </motion.div>
                   ))}
                 </div>
-              </GlowCard>
+              </CardGlass>
             </motion.div>
           </div>
         </div>
@@ -213,7 +217,7 @@ export default function WorkDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
-            <GlowCard className="p-12">
+            <CardGlass className="p-12">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
                 Inspiré par ce projet ?
               </h2>
@@ -223,17 +227,17 @@ export default function WorkDetail() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/contact">
-                  <button className="btn-primary text-lg px-8 py-4">
+                  <NeonButton size="lg">
                     Discuter de mon projet
-                  </button>
+                  </NeonButton>
                 </Link>
                 <Link to="/services">
-                  <button className="btn-secondary text-lg px-8 py-4">
+                  <NeonButton variant="secondary" size="lg">
                     Voir nos services
-                  </button>
+                  </NeonButton>
                 </Link>
               </div>
-            </GlowCard>
+            </CardGlass>
           </motion.div>
         </div>
       </section>
@@ -257,9 +261,9 @@ export default function WorkDetail() {
                 <p className="text-gray-400 mb-6">
                   Cette fonctionnalité sera disponible avec les vraies données du projet.
                 </p>
-                <button onClick={() => setIsVideoPlaying(false)} className="btn-primary">
+                <NeonButton onClick={() => setIsVideoPlaying(false)}>
                   Fermer
-                </button>
+                </NeonButton>
               </div>
             </div>
             <button
